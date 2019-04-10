@@ -69,21 +69,20 @@ f.write(json.dumps(results_get, indent=4))
 f.close()
 
 # CALCULOS
-
-#Calcular tempo resultante GET
-result_time_get = 0
+result_time_set = result_time_get = 0
+IOPS_GET = IOPS_SET = 0
+#Calcular IOPS GET 
 for i in range(len(results_get)):
         aux = results_get[i][3] - results_get[i][4]
         result_time_get += aux
-print(result_time_get)
+	IOPS_GET += results_get[i][0] / result_time_get
 
-#Calcular tempo resultante SET
-result_time_set = 0
+#Calcular IOPS SET
 for i in range(len(results_set)):
         aux = results_set[i][3] - results_set[i][4]
-        result_time_set += aux
-print(result_time_set)
+ 	result_time_set += aux
+        IOPS_SET += results_set[i][0] / result_time_set
 
-#IOPS
-
-
+#IOPS TOTAL
+IOPS = IOPS_GET + IOPS_SET
+print(IOPS)
