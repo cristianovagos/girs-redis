@@ -70,4 +70,20 @@ f.close()
 
 # CALCULOS
 
+#Calcular tempo resultante GET
+result_time_get = 0
+for i in range(len(results_get)):
+        aux = results_get[i][3] - results_get[i][4]
+        result_time_get += aux
+print(result_time_get)
+
+#Calcular tempo resultante SET
+result_time_set = 0
+for i in range(len(results_set)):
+        aux = results_set[i][3] - results_set[i][4]
+        result_time_set += aux
+print(result_time_set)
+
+#IOPS
+
 
