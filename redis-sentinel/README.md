@@ -13,7 +13,9 @@ The project goal is to manage and setup a high-availability service, such as Red
 This deployment will have 3 instances of Redis Sentinel, which will monitor the other 3 Redis instances that will 
 be deployed. Initially, the cluster will have 1 Master and 2 Slaves, but the Sentinel instances will monitor the 
 whole cluster and if the Master fails, they will elect a new Master. Redis will replicate the information kept on 
-the Master instance to the Slaves. A important note: its only possible to write data to the Master instance, and 
+the Master instance to the Slaves. 
+
+**A important note:** its only possible to write data to the Master instance, and 
 because we don't know which of the instances is the Master, we will ask Sentinel which is the cluster Master, and then
 we can write data onto it, but it's possible to get data from the Slaves, as they are readonly.
 

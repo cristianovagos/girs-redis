@@ -13,7 +13,8 @@ docker service create  \
 --publish 7000:6379 \
 --replicas 1 \
 redis:alpine redis-server  \
---port 6379;
+--port 6379 \
+--maxmemory 2gb;
 
 # Configuração do Slave1
 docker service create  \
@@ -24,6 +25,7 @@ docker service create  \
 redis:alpine redis-server \
  --slaveof redis-master 6379  \
  --port 6380 \
+ --maxmemory 2gb \
  --slave-announce-ip $SWARM_MASTER
 
 # Configuração do Slave2
@@ -35,6 +37,7 @@ docker service create  \
 redis:alpine redis-server  \
 --slaveof redis-master 6379  \
 --port 6381 \
+--maxmemory 2gb \
 --slave-announce-ip $SWARM_MASTER
 
 # Configuração dos Redis Sentinels
