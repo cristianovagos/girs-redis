@@ -10,10 +10,15 @@ The project goal is to manage and setup a high-availability service, such as Red
 - [Marco Macedo](http://github.com/marcomacedo)
 
 ### Projects
-Here we have two different approaches, one using Redis Cluster with 6 instances (3 Master / 3 Slave), and other approach
+Here we have ~~two~~ three different approaches, one using Redis Cluster with 6 instances (3 Master / 3 Slave) with HAProxy, other approach is using simply Redis Cluster, and other approach
 using a set of 3 Redis Sentinels, and 3 instances (1 Master, 2 Slave). 
 
 Check them out here:
+* [**Redis Cluster with HAProxy**](./redis-cluster-haproxy/) (_**recommended**_)
+* [~~Redis Cluster~~](./redis-cluster/) (_working but not recommended_)
+* [~~Redis Sentinel~~](./redis-sentinel/) (_working but not recommended_)
 
-* [Redis Cluster](./redis-cluster/)
-* [Redis Sentinel](./redis-sentinel/)
+We recommend the Redis Cluster with HAProxy because it provides features like load balancing, and provides a single 
+point of access for client connection.
+
+Read each README for more details and information.
