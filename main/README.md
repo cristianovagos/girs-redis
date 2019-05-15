@@ -10,6 +10,8 @@ The project goal is to manage and setup a high-availability service, such as Red
 - [Marco Macedo](http://github.com/marcomacedo)
 
 ### Info
+![Architecture](RedisClusterArchitecture.png)
+
 Initially, this deployment will launch 6 instances of Redis, which will later be built as a Redis Cluster, consisting on a 
 3 Master, 3 Slave architecture. The _redis-cli_ client will suggest one cluster architecture, which will be the one
 accepted and formed.

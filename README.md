@@ -15,7 +15,7 @@ Initially we built three different approaches, using a simple Redis Cluster (3 M
 During the development we figured out that using a Redis Cluster infrastructure is the way to go, providing features such as data sharding and automatic failover, so we will stick with this solution, providing a high-availability service using multiple tools (load balancing, monitoring, etc). We will continue to update the _main_ folder, which will have the work we will deploy and test to the course requirements.
 
 Main development:
-* [**Redis Cluster **](./main/) (_**active development**_)
+* [**Redis Cluster**](./main/) (_**active development**_)
 
 Other solutions:
 * [~~Redis Cluster~~](./other-solutions/redis-cluster/) (_Deprecated. Working for demo issues_)
