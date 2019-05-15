@@ -1,10 +1,13 @@
 #!/bin/bash
 
-printf "GIRS 2019 - Redis Cluster with HAProxy\nCristiano Vagos, Miguel Bras, Marco Macedo\n\n"
+printf "GIRS 2019 - Redis Cluster\nCristiano Vagos, Miguel Bras, Marco Macedo\n\n"
 printf "Creating overlay network...\n"
 
 # IP do swarm manager
 swarm_master=192.168.99.100
+
+# IP virtual (floating IP)
+virtual_ip_addr=10.0.0.123
 
 # cria a rede overlay na swarm
 docker network create -d overlay --attachable rediscluster_net
@@ -23,7 +26,8 @@ for ind in `seq 1 6`; do \
     cluster-node-timeout 5000
     cluster-announce-ip $swarm_master
     appendonly no
-    maxmemory 2gb
+    maxmemory 1gb
+    maxmemory-policy allkeys-lru
     " \
     -p "700$ind:700$ind" \
     -p "1700$ind:1700$ind" \
@@ -43,21 +47,9 @@ docker exec -it $first_redis redis-cli --cluster create \
   echo -n "$swarm_master:700$ind "
   done) --cluster-replicas 1
 
-printf "\nCreating custom HAProxy instance for load balancing onto the Redis Cluster...\n"
+printf "\nCreating 2 custom HAProxy + keepalived instances for load balancing onto the Redis Cluster...\n"
 
-# faz build a imagem do haproxy
-docker build -t redis-haproxy ./haproxy/
-
-redis_hosts2=$(for ind in `seq 1 6`; do \
-  echo -n "$swarm_master:700$ind,"
-  done)
-
-# comeca o haproxy
-docker service create --name redis-proxy \
-  --network $network \
-  -p "7010:7010" \
-  -p "7020:7020" \
-  -e REDIS_HOSTS=$redis_hosts2 \
-  redis-haproxy:latest
+cd ./lb/
+vagrant up
 
 printf "\nAll done and up. Enjoy Redis Cluster!\n"
