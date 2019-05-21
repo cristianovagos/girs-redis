@@ -1,0 +1,68 @@
+- name: Setting up Redis Cluster loadbalancer 1
+  hosts: lb1
+  become: true
+  become_method: sudo
+
+  tasks:
+  - name: Update repositories and install virtualbox and vagrant
+    apt: 
+      name: "{{ packages }}"
+      update_cache: yes
+    vars:
+      packages:
+      - virtualbox
+      - vagrant
+
+  - name: Create folder to copy configs
+    command: mkdir -p lb-config
+
+  - name: Copy files to that folder
+    copy: 
+      src: "{{ playbook_dir }}/lb/master/{{ files }}"
+      dest: ./lb-config/
+    vars:
+      files:
+      - haproxy.sh
+      - keepalived.conf.master
+      - Vagrantfile
+  
+  - name: Go to that folder
+    command: cd lb-config
+  
+  - name: Launch loadbalancer 1 VM
+    command: vagrant up
+
+
+- name: Setting up Redis Cluster loadbalancer 2
+  hosts: lb2
+  become: true
+  become_method: sudo
+
+  tasks:
+  - name: Update repositories and install virtualbox and vagrant
+    apt: 
+      name: "{{ packages }}"
+      update_cache: yes
+    vars:
+      packages:
+      - virtualbox
+      - vagrant
+
+  - name: Create folder to copy configs
+    command: mkdir -p lb-config
+
+  - name: Copy files to that folder
+    copy: 
+      src: "{{ playbook_dir }}/lb/backup/{{ files }}"
+      dest: ./lb-config/
+    vars:
+      files:
+      - haproxy.sh
+      - keepalived.conf.backup
+      - Vagrantfile
+  
+  - name: Go to that folder
+    command: cd lb-config
+  
+  - name: Launch loadbalancer 2 VM
+    command: vagrant up
