@@ -49,7 +49,7 @@ docker exec -it $first_redis redis-cli --cluster create \
 
 printf "\nCreating 2 custom HAProxy + keepalived instances for load balancing onto the Redis Cluster...\n"
 
-cd ./lb/
-vagrant up
+cd ./ansible/
+ansible-playbook lb-playbook.yml --ask-sudo-pass -v
 
 printf "\nAll done and up. Enjoy Redis Cluster!\n"

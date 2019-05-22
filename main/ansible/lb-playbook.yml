@@ -1,9 +1,22 @@
+# LOAD BALANCER 1
 - name: Setting up Redis Cluster loadbalancer 1
   hosts: lb1
   become: true
   become_method: sudo
 
   tasks:
+  - name: Add main repository
+    command: add-apt-repository main
+  
+  - name: Add universe repository
+    command: add-apt-repository universe
+  
+  - name: Add restricted repository
+    command: add-apt-repository restricted
+  
+  - name: Add multiverse repository
+    command: add-apt-repository multiverse
+
   - name: Update repositories and install virtualbox and vagrant
     apt: 
       name: "{{ packages }}"
@@ -16,29 +29,43 @@
   - name: Create folder to copy configs
     command: mkdir -p lb-config
 
-  - name: Copy files to that folder
+  - name: Copy haproxy.sh to master folder
     copy: 
-      src: "{{ playbook_dir }}/lb/master/{{ files }}"
+      src: "{{ playbook_dir }}/../lb/master/haproxy.sh"
       dest: ./lb-config/
-    vars:
-      files:
-      - haproxy.sh
-      - keepalived.conf.master
-      - Vagrantfile
-  
-  - name: Go to that folder
-    command: cd lb-config
-  
+
+  - name: Copy keepalived configuration to master folder
+    copy: 
+      src: "{{ playbook_dir }}/../lb/master/keepalived.conf.master"
+      dest: ./lb-config/
+
+  - name: Copy Vagrantfile to master folder
+    copy: 
+      src: "{{ playbook_dir }}/../lb/master/Vagrantfile"
+      dest: ./lb-config/
+
   - name: Launch loadbalancer 1 VM
-    command: vagrant up
+    command: chdir=/home/girs/lb-config vagrant up --provision
 
-
+# LOAD BALANCER 2
 - name: Setting up Redis Cluster loadbalancer 2
   hosts: lb2
   become: true
   become_method: sudo
 
   tasks:
+  - name: Add main repository
+    command: add-apt-repository main
+  
+  - name: Add universe repository
+    command: add-apt-repository universe
+  
+  - name: Add restricted repository
+    command: add-apt-repository restricted
+  
+  - name: Add multiverse repository
+    command: add-apt-repository multiverse
+
   - name: Update repositories and install virtualbox and vagrant
     apt: 
       name: "{{ packages }}"
@@ -51,18 +78,20 @@
   - name: Create folder to copy configs
     command: mkdir -p lb-config
 
-  - name: Copy files to that folder
+  - name: Copy haproxy.sh to backup folder
     copy: 
-      src: "{{ playbook_dir }}/lb/backup/{{ files }}"
+      src: "{{ playbook_dir }}/../lb/backup/haproxy.sh"
       dest: ./lb-config/
-    vars:
-      files:
-      - haproxy.sh
-      - keepalived.conf.backup
-      - Vagrantfile
-  
-  - name: Go to that folder
-    command: cd lb-config
-  
+
+  - name: Copy keepalived configuration to backup folder
+    copy: 
+      src: "{{ playbook_dir }}/../lb/backup/keepalived.conf.backup"
+      dest: ./lb-config/
+
+  - name: Copy Vagrantfile to backup folder
+    copy: 
+      src: "{{ playbook_dir }}/../lb/backup/Vagrantfile"
+      dest: ./lb-config/
+    
   - name: Launch loadbalancer 2 VM
-    command: vagrant up
+    command: chdir=/home/girs/lb-config vagrant up --provision

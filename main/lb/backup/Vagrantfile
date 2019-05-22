@@ -7,7 +7,7 @@ Vagrant.configure("2") do |config|
             vb_config.name = "HAProxy + keepalived 2"
         end
         lb2_config.vm.hostname = "lb2"
-        lb2_config.vm.network "private_network", ip: "192.168.215.201"
+        lb2_config.vm.network "public_network", ip: "192.168.215.211", bridge: "enp2s0"
         lb2_config.vm.network :forwarded_port, guest: 80, host: 8080
         lb2_config.vm.network :forwarded_port, guest: 9000, host: 9000
         lb2_config.vm.provision :shell, path: "haproxy.sh"

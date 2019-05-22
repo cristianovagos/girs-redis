@@ -43,6 +43,15 @@ frontend ft_redis
     mode tcp
     bind *:80
     default_backend bk_redis
+# Configure statistics page
+listen stats
+	mode http
+    bind :9000
+	stats enable
+	stats hide-version
+	stats realm HAproxy\ Statistics
+	stats uri /stats
+	stats auth admin:admin
 backend bk_redis
     balance roundrobin
     mode tcp
@@ -54,21 +63,12 @@ backend bk_redis
     tcp-check expect string role:master
     tcp-check send QUIT\r\n
     tcp-check expect string +OK
-    server redis-1 192.168.99.100:7001 maxconn 1024 check inter 1s
-    server redis-2 192.168.99.100:7002 maxconn 1024 check inter 1s
-    server redis-3 192.168.99.100:7003 maxconn 1024 check inter 1s
-    server redis-4 192.168.99.100:7004 maxconn 1024 check inter 1s
-    server redis-5 192.168.99.100:7005 maxconn 1024 check inter 1s
-    server redis-6 192.168.99.100:7006 maxconn 1024 check inter 1s
-# Configure statistics page
-listen stats
-	mode http
-    bind :9000
-	stats enable
-	stats hide-version
-	stats realm HAproxy\ Statistics
-	stats uri /stats
-	stats auth admin:admin
+    server redis-1 192.168.215.21:7001 maxconn 1024 check inter 1s
+    server redis-2 192.168.215.21:7002 maxconn 1024 check inter 1s
+    server redis-3 192.168.215.21:7003 maxconn 1024 check inter 1s
+    server redis-4 192.168.215.21:7004 maxconn 1024 check inter 1s
+    server redis-5 192.168.215.21:7005 maxconn 1024 check inter 1s
+    server redis-6 192.168.215.21:7006 maxconn 1024 check inter 1s
 EOF
 
 systemctl enable haproxy
@@ -78,3 +78,7 @@ systemctl start haproxy
 echo "Installing keepalived"
 apt-get install -y keepalived
 systemctl enable keepalived
+
+sleep 10
+
+systemctl restart haproxy
