@@ -43,6 +43,14 @@
     copy: 
       src: "{{ playbook_dir }}/../lb/master/Vagrantfile"
       dest: ./lb-config/
+  
+  - name: Copy rc.local to /etc folder
+    copy:
+      src: "{{ playbook_dir }}/../lb/master/rc.local"
+      dest: /etc/
+  
+  - name: Setting rc.local execution permission
+    file: dest=/etc/rc.local mode=a+x
 
   - name: Launch loadbalancer 1 VM
     command: chdir=/home/girs/lb-config vagrant up --provision
@@ -92,6 +100,14 @@
     copy: 
       src: "{{ playbook_dir }}/../lb/backup/Vagrantfile"
       dest: ./lb-config/
+  
+  - name: Copy rc.local to /etc folder
+    copy:
+      src: "{{ playbook_dir }}/../lb/master/rc.local"
+      dest: /etc/
+
+  - name: Setting rc.local execution permission
+    file: dest=/etc/rc.local mode=a+x
     
   - name: Launch loadbalancer 2 VM
     command: chdir=/home/girs/lb-config vagrant up --provision
